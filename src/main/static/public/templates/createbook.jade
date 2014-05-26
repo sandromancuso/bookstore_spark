@@ -3,8 +3,10 @@ html
     head
         title=pageName
     body
-        p
-            span Add book to library
+        div
+            p: a(href="/") Home
+
+        p: span Add book to library
 
         form(name="addbook", action="/books", method="post")
             div

@@ -1,0 +1,19 @@
+!!! 5
+html
+    head
+        title=pageName
+    body
+        div
+            p: a(href="/") Home
+
+        p: strong Your basket #{basket_count}
+
+        div
+            ul#basket
+                for book in basket
+                    li
+                        | #{book.id} -
+                        a(href="/books/#{book.id}")=book.name
+                        =' '
+                        | for £ #{book.price}
+

@@ -28,7 +28,11 @@ public class BookStoreApp {
 
 		staticFileLocation("/public");
 
-		get("/hello", (request, response) -> "Hello, World!");
+		get("/", (request, response) -> {
+			response.redirect("/books");
+			response.status(NO_CONTENT);
+			return "";
+		});
 
 		get("/books", new Route() {
 			@Override
@@ -36,7 +40,7 @@ public class BookStoreApp {
 				ViewModel viewModel = new ViewModel();
 				viewModel.put("pageName", "Books");
 				viewModel.put("books", bookList);
-				viewModel.put("basket_items_count", basket.size());
+				viewModel.put("basket_count", basket.size());
 
 				return render("index.jade", viewModel);
 			}
@@ -127,6 +131,18 @@ public class BookStoreApp {
 				response.redirect("/books");
 				response.status(NO_CONTENT);
 				return "";
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+
+		get("/basket", (request, response) -> {
+			try {
+				ViewModel viewModel = new ViewModel();
+				viewModel.put("basket_count", basket.size());
+				viewModel.put("basket", basket);
+				return render("basket.jade", viewModel);
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
