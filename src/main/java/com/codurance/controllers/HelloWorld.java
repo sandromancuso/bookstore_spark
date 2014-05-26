@@ -40,7 +40,7 @@ public class HelloWorld {
 			}
 		});
 
-		post("/books/search", new Route() {
+		get("/books/search", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
 				try {
@@ -49,6 +49,7 @@ public class HelloWorld {
 
 					ViewModel viewModel = new ViewModel();
 					viewModel.put("pageName", "Books");
+					viewModel.put("criteria", criteria);
 					viewModel.put("books", filteredBooks);
 
 					return render("index.jade", viewModel);
