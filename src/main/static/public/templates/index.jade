@@ -3,6 +3,11 @@ html
     head
         title=pageName
     body
+        p: span Your
+            =' '
+            a(href="/shoppingbasket") basket(#{basket_items_count})
+
+
         form(name="searchbook", action="/books/search", method="get")
             span Search
             input(type="text", name="criteria", value=criteria)
@@ -18,6 +23,11 @@ html
                         a(href="/books/#{book.id}")=book.name
                         =' '
                         | for £ #{book.price}
+                        =' '
+                        div
+                            form(action="/basket", method="post")
+                                input(type="hidden", name="bookId", value="#{book.id}")
+                                input(type="submit", value="add to basket")
 
         p
             a(href="/books/add") Add book to library

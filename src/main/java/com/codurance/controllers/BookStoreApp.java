@@ -20,7 +20,7 @@ public class BookStoreApp {
 
 	public static final int NO_CONTENT = 204;
 	private static List<Book> bookList = new ArrayList<>();
-	private static List<Book> shoppingCart = new ArrayList<>();
+	private static List<Book> basket = new ArrayList<>();
 
 	public static void main(String[] args) {
 
@@ -36,6 +36,7 @@ public class BookStoreApp {
 				ViewModel viewModel = new ViewModel();
 				viewModel.put("pageName", "Books");
 				viewModel.put("books", bookList);
+				viewModel.put("basket_items_count", basket.size());
 
 				return render("index.jade", viewModel);
 			}
@@ -113,7 +114,7 @@ public class BookStoreApp {
 			}
 		});
 
-		post("/shoppincart", (request, response) -> {
+		post("/basket", (request, response) -> {
 			try {
 				int id = Integer.valueOf(request.queryParams("bookId"));
 				Optional<Book> book = getBookBy(id);
@@ -121,7 +122,7 @@ public class BookStoreApp {
 					return notFound(response);
 				}
 
-				shoppingCart.add(book.get());
+				basket.add(book.get());
 
 				response.redirect("/books");
 				response.status(NO_CONTENT);
@@ -131,6 +132,7 @@ public class BookStoreApp {
 				throw new RuntimeException(e);
 			}
 		});
+
 	}
 
 	private static Optional<Book> getBookBy(int id) {
