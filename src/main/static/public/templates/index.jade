@@ -11,20 +11,26 @@ html
         ul#books
             for book in books
                 if book.available
-                    li #{book.id} - #{book.name} for £ #{book.price}
-
+                    li
+                        | #{book.id} -
+                        a(href="/books/#{book.id}")=book.name
+                        =' '
+                        | for £ #{book.price}
 
         p
             strong Add a book
         form(name="addbook", action="/books", method="post")
             div
-                span name
-                input(type="text", name="name")
-            div
-                span price
-                input(type="text", name="price")
-            div
-                span available
-                input(type="checkbox", checked, name="available")
+                dt: span name
+                dd: input(type="text", name="name")
+
+                dt: span description
+                dd: input(type="text", name="description")
+
+                dt: span price
+                dd: input(type="text", name="price")
+
+                dt: span available
+                dd: input(type="checkbox", checked, name="available")
             div
                 input(type="submit", value="Add book")
