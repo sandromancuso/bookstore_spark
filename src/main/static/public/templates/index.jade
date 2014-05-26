@@ -20,19 +20,4 @@ html
                         | for £ #{book.price}
 
         p
-            strong Add a book
-        form(name="addbook", action="/books", method="post")
-            div
-                dt: span name
-                dd: input(type="text", name="name")
-
-                dt: span description
-                dd: input(type="text", name="description")
-
-                dt: span price
-                dd: input(type="text", name="price")
-
-                dt: span available
-                dd: input(type="checkbox", checked, name="available")
-            div
-                input(type="submit", value="Add book")
+            a(href="/books/add") Add book to library

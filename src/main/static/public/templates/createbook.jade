@@ -1,0 +1,20 @@
+!!! 5
+html
+    head
+        title=pageName
+    body
+        p
+            span Add book to library
+
+        form(name="addbook", action="/books", method="post")
+            div
+                dt: span name
+                dd: input(type="text", name="name")
+                dt: span description
+                dd: input(type="text", name="description")
+                dt: span price
+                dd: input(type="text", name="price")
+                dt: span available
+                dd: input(type="checkbox", checked, name="available")
+            div
+                input(type="submit", value="Add book")

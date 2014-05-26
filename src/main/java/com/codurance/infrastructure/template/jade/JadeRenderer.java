@@ -18,4 +18,8 @@ public class JadeRenderer {
 		}
 	}
 
+	public static String render(String template) {
+		return render(template, new ViewModel());
+	}
+
 }

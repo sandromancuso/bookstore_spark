@@ -60,6 +60,15 @@ public class BookStoreApp {
 			}
 		});
 
+		get("/books/add", (request, response) -> {
+			try {
+				return render("createbook.jade");
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+
 		post("/books", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
