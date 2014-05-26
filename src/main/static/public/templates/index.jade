@@ -3,6 +3,11 @@ html
     head
         title=pageName
     body
+        form(name="login", action="/books/search", method="post")
+            span Search
+            input(type="text", name="criteria")
+            input(type="submit", value="Search")
+
         ol#books
             for book in books
                 if book.available
