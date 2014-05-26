@@ -1,4 +1,4 @@
-## Spark and Jade
+## Legagy Code App using Spark and Jade
 
 Small project to try [Spark](http://www.sparkjava.com/index.html), [Jade](http://jade-lang.com/), 
 and [Jade4J](https://github.com/neuland/jade4j)
