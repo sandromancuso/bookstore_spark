@@ -17,6 +17,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>de.neuland-bfi</groupId>
+			<artifactId>jade4j</artifactId>
+			<version>0.4.0</version>
+		</dependency>
+		<dependency>
 			<groupId>com.sparkjava</groupId>
 			<artifactId>spark-core</artifactId>
 			<version>2.0.0</version>
@@ -48,6 +53,9 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/static</directory>
 			</resource>
 			<resource>
 				<directory>src/core/resources</directory>
