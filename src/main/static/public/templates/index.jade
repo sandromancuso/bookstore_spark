@@ -3,12 +3,28 @@ html
     head
         title=pageName
     body
-        form(name="login", action="/books/search", method="post")
+        form(name="searchbook", action="/books/search", method="post")
             span Search
             input(type="text", name="criteria")
             input(type="submit", value="Search")
 
-        ol#books
+        ul#books
             for book in books
                 if book.available
-                    li #{book.name} for #{book.price} €
+                    li #{book.id} - #{book.name} for £ #{book.price}
+
+
+        p
+            strong Add a book
+        form(name="addbook", action="/books", method="post")
+            div
+                span name
+                input(type="text", name="name")
+            div
+                span price
+                input(type="text", name="price")
+            div
+                span available
+                input(type="checkbox", checked, name="available")
+            div
+                input(type="submit", value="Add book")

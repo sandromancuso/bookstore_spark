@@ -3,14 +3,21 @@ package com.codurance.controllers;
 import com.codurance.infrastructure.template.jade.ViewModel;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.codurance.infrastructure.template.jade.JadeRenderer.render;
+import static java.lang.Boolean.parseBoolean;
+import static java.lang.Double.parseDouble;
+import static java.util.Comparator.reverseOrder;
 import static spark.Spark.*;
 
 public class HelloWorld {
 
+	public static final int NO_CONTENT = 204;
 	private static List<Book> bookList = new ArrayList<>();
 
 	public static void main(String[] args) {
@@ -44,12 +51,38 @@ public class HelloWorld {
 				throw new RuntimeException(e);
 			}
 		});
+
+		post("/books", (request, response) -> {
+			try {
+				int nextId = nextBookId();
+				Book book = new Book(
+					nextId,
+					request.queryParams("name"),
+					request.queryParams("available") != null,
+					parseDouble(request.queryParams("price"))
+				);
+				bookList.add(book);
+
+				response.redirect("/books");
+				response.status(NO_CONTENT);
+				return "";
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+	}
+
+	private static int nextBookId() {
+		Stream<Integer> bookListDescending = bookList.stream().map(Book::getId).sorted(reverseOrder());
+		Optional<Integer> lastId = bookListDescending.findFirst();
+		return lastId.orElse(0) + 1;
 	}
 
 	private static void createBooks() {
-		bookList.add(new Book(1, "Book A", true, 10));
-		bookList.add(new Book(2, "Book B", false, 20));
-		bookList.add(new Book(3, "Book C", true, 30));
+		bookList.add(new Book(nextBookId(), "Book A", true, 10));
+		bookList.add(new Book(nextBookId(), "Book B", false, 20));
+		bookList.add(new Book(nextBookId(), "Book C", true, 30));
 	}
 
 	public static class Book {
