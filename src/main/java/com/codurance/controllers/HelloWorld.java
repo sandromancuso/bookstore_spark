@@ -1,7 +1,9 @@
 package com.codurance.controllers;
 
 import com.codurance.infrastructure.template.jade.ViewModel;
+import spark.Request;
 import spark.Response;
+import spark.Route;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,64 +29,76 @@ public class HelloWorld {
 
 		get("/hello", (request, response) -> "Hello, World!");
 
-		get("/books", (request, response) -> {
-			ViewModel viewModel = new ViewModel();
-			viewModel.put("pageName", "Books");
-			viewModel.put("books", bookList);
-
-			return render("index.jade", viewModel);
-		});
-
-		post("/books/search", (request, response) -> {
-			try {
-				String criteria = request.queryParams("criteria");
-				List<Book> filteredBooks = bookList.stream().filter(book -> book.getName().contains(criteria)).collect(Collectors.toList());
-
+		get("/books", new Route() {
+			@Override
+			public Object handle(Request request, Response response) {
 				ViewModel viewModel = new ViewModel();
 				viewModel.put("pageName", "Books");
-				viewModel.put("books", filteredBooks);
+				viewModel.put("books", bookList);
 
 				return render("index.jade", viewModel);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
 			}
 		});
 
-		post("/books", (request, response) -> {
-			try {
-				int nextId = nextBookId();
-				Book book = new Book(
-					nextId,
-					request.queryParams("name"),
-					request.queryParams("description"),
-					request.queryParams("available") != null,
-					parseDouble(request.queryParams("price"))
-				);
-				bookList.add(book);
+		post("/books/search", new Route() {
+			@Override
+			public Object handle(Request request, Response response) {
+				try {
+					String criteria = request.queryParams("criteria");
+					List<Book> filteredBooks = bookList.stream().filter(book -> book.getName().contains(criteria)).collect(Collectors.toList());
 
-				response.redirect("/books");
-				response.status(NO_CONTENT);
-				return "";
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-		});
+					ViewModel viewModel = new ViewModel();
+					viewModel.put("pageName", "Books");
+					viewModel.put("books", filteredBooks);
 
-		get("/books/:id", (request, response) -> {
-			try {
-				int id = Integer.valueOf(request.params(":id"));
-				Optional<Book> book = bookList.stream().collect(Collectors.groupingBy(Book::getId)).get(id).stream().findAny();
-				if (!book.isPresent()) {
-					return notFound(response);
+					return render("index.jade", viewModel);
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
 				}
-				ViewModel model = new ViewModel();
-				model.put("book", book.get());
-				return render("bookdetails.jade", model);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
+			}
+		});
+
+		post("/books", new Route() {
+			@Override
+			public Object handle(Request request, Response response) {
+				try {
+					int nextId = nextBookId();
+					Book book = new Book(
+							nextId,
+							request.queryParams("name"),
+							request.queryParams("description"),
+							request.queryParams("available") != null,
+							parseDouble(request.queryParams("price"))
+					);
+					bookList.add(book);
+
+					response.redirect("/books");
+					response.status(NO_CONTENT);
+					return "";
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+			}
+		});
+
+		get("/books/:id", new Route() {
+			@Override
+			public Object handle(Request request, Response response) {
+				try {
+					int id = Integer.valueOf(request.params(":id"));
+					Optional<Book> book = bookList.stream().collect(Collectors.groupingBy(Book::getId)).get(id).stream().findAny();
+					if (!book.isPresent()) {
+						return notFound(response);
+					}
+					ViewModel model = new ViewModel();
+					model.put("book", book.get());
+					return render("bookdetails.jade", model);
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
 			}
 		});
 	}
