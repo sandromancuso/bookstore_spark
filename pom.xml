@@ -15,6 +15,14 @@
 		<surefireArgs>-Xms512m -Xmx512m -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC -XX:MaxPermSize=512m</surefireArgs>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>typesafe</id>
+			<name>typesafe</name>
+			<url>http://repo.typesafe.com/typesafe/releases</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>de.neuland-bfi</groupId>
@@ -30,6 +38,11 @@
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 			<version>3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>play</groupId>
+			<artifactId>anorm_2.10</artifactId>
+			<version>2.1.5</version>
 		</dependency>
 
 		<dependency>
@@ -61,6 +74,12 @@
 			<groupId>info.cukes</groupId>
 			<artifactId>cucumber-junit</artifactId>
 			<version>1.1.5</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.41.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
