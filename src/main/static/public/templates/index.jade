@@ -7,6 +7,8 @@ html
             span Search
             input(type="text", name="criteria", value=criteria)
             input(type="submit", value="Search")
+        p
+            a(href="/books") All books
 
         ul#books
             for book in books
