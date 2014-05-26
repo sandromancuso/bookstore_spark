@@ -16,7 +16,7 @@ import static java.lang.Double.parseDouble;
 import static java.util.Comparator.reverseOrder;
 import static spark.Spark.*;
 
-public class HelloWorld {
+public class BookStoreApp {
 
 	public static final int NO_CONTENT = 204;
 	private static List<Book> bookList = new ArrayList<>();
