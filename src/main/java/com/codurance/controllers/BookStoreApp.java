@@ -20,6 +20,7 @@ public class BookStoreApp {
 
 	public static final int NO_CONTENT = 204;
 	private static List<Book> bookList = new ArrayList<>();
+	private static List<Book> shoppingCart = new ArrayList<>();
 
 	public static void main(String[] args) {
 
@@ -96,21 +97,44 @@ public class BookStoreApp {
 		get("/books/:id", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
-				try {
-					int id = Integer.valueOf(request.params(":id"));
-					Optional<Book> book = bookList.stream().collect(Collectors.groupingBy(Book::getId)).get(id).stream().findAny();
-					if (!book.isPresent()) {
-						return notFound(response);
-					}
-					ViewModel model = new ViewModel();
-					model.put("book", book.get());
-					return render("bookdetails.jade", model);
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException(e);
+			try {
+				int id = Integer.valueOf(request.params(":id"));
+				Optional<Book> book = getBookBy(id);
+				if (!book.isPresent()) {
+					return notFound(response);
 				}
+				ViewModel model = new ViewModel();
+				model.put("book", book.get());
+				return render("bookdetails.jade", model);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 			}
 		});
+
+		post("/shoppincart", (request, response) -> {
+			try {
+				int id = Integer.valueOf(request.queryParams("bookId"));
+				Optional<Book> book = getBookBy(id);
+				if (!book.isPresent()) {
+					return notFound(response);
+				}
+
+				shoppingCart.add(book.get());
+
+				response.redirect("/books");
+				response.status(NO_CONTENT);
+				return "";
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+	}
+
+	private static Optional<Book> getBookBy(int id) {
+		return bookList.stream().collect(Collectors.groupingBy(Book::getId)).get(id).stream().findAny();
 	}
 
 	private static String notFound(Response response) {
