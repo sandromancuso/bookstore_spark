@@ -1,7 +1,6 @@
 package com.codurance.controllers;
 
 import com.codurance.infrastructure.template.jade.ViewModel;
-import com.codurance.model.books.Book;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +50,38 @@ public class HelloWorld {
 		bookList.add(new Book(1, "Book A", true, 10));
 		bookList.add(new Book(2, "Book B", false, 20));
 		bookList.add(new Book(3, "Book C", true, 30));
+	}
+
+	public static class Book {
+
+		private final boolean available;
+		private final String name;
+		private final int id;
+		private final double price;
+
+		public Book(int id, String name, boolean available, double price) {
+			this.id = id;
+			this.name = name;
+			this.available = available;
+			this.price = price;
+		}
+
+		public int getId() {
+			return this.id;
+		}
+
+		public String getName() {
+			return this.name;
+		}
+
+		public boolean isAvailable() {
+			return this.available;
+		}
+
+		public double getPrice() {
+			return this.price;
+		}
+
 	}
 
 }
