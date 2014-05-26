@@ -142,6 +142,7 @@ public class BookStoreApp {
 				ViewModel viewModel = new ViewModel();
 				viewModel.put("basket_count", basket.size());
 				viewModel.put("basket", basket);
+				viewModel.put("total", basketTotal());
 				return render("basket.jade", viewModel);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -149,6 +150,28 @@ public class BookStoreApp {
 			}
 		});
 
+		post("/basket/delete", (request, response) -> {
+			try {
+				int id = Integer.valueOf(request.queryParams("bookId"));
+				Optional<Book> book = getBookBy(id);
+				if (!book.isPresent()) {
+					return notFound(response);
+				}
+				basket.remove(book.get());
+
+				response.redirect("/basket");
+				response.status(NO_CONTENT);
+				return "";
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+
+	}
+
+	private static Double basketTotal() {
+		return basket.stream().map(b -> b.getPrice()).reduce(0.0, (a, b) -> a + b);
 	}
 
 	private static Optional<Book> getBookBy(int id) {

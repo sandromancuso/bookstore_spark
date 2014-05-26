@@ -16,4 +16,10 @@ html
                         a(href="/books/#{book.id}")=book.name
                         =' '
                         | for £ #{book.price}
+                        =' '
+                        form(action="/basket/delete", method="post")
+                            input(type="hidden", name="bookId", value="#{book.id}")
+                            input(type="submit", value="remove")
 
+        div
+            p Total: #{total}
