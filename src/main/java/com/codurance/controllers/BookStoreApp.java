@@ -1,9 +1,7 @@
 package com.codurance.controllers;
 
 import com.codurance.infrastructure.template.jade.ViewModel;
-import spark.Request;
 import spark.Response;
-import spark.Route;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,35 +34,29 @@ public class BookstoreApp {
 			return "";
 		});
 
-		get("/books", new Route() {
-			@Override
-			public Object handle(Request request, Response response) {
-				ViewModel viewModel = new ViewModel();
-				viewModel.put("pageName", "Books");
-				viewModel.put("books", bookList);
-				viewModel.put("basket_count", basket.size());
+		get("/books", (request, response) -> {
+			ViewModel viewModel = new ViewModel();
+			viewModel.put("pageName", "Books");
+			viewModel.put("books", bookList);
+			viewModel.put("basket_count", basket.size());
 
-				return render("index.jade", viewModel);
-			}
+			return render("index.jade", viewModel);
 		});
 
-		get("/books/search", new Route() {
-			@Override
-			public Object handle(Request request, Response response) {
-				try {
-					String criteria = request.queryParams("criteria");
-					List<Book> filteredBooks = bookList.stream().filter(book -> book.getName().contains(criteria)).collect(Collectors.toList());
+		get("/books/search", (request, response) -> {
+			try {
+				String criteria = request.queryParams("criteria");
+				List<Book> filteredBooks = bookList.stream().filter(book -> book.getName().contains(criteria)).collect(Collectors.toList());
 
-					ViewModel viewModel = new ViewModel();
-					viewModel.put("pageName", "Books");
-					viewModel.put("criteria", criteria);
-					viewModel.put("books", filteredBooks);
+				ViewModel viewModel = new ViewModel();
+				viewModel.put("pageName", "Books");
+				viewModel.put("criteria", criteria);
+				viewModel.put("books", filteredBooks);
 
-					return render("index.jade", viewModel);
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException(e);
-				}
+				return render("index.jade", viewModel);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
 			}
 		});
 
@@ -113,49 +105,43 @@ public class BookstoreApp {
 			}
 		});
 
-		post("/books", new Route() {
-			@Override
-			public Object handle(Request request, Response response) {
-				try {
-					int nextId = nextBookId();
-					Book book = new Book(
-							nextId,
-							request.queryParams("name"),
-							request.queryParams("description"),
-							request.queryParams("available") != null,
-							parseDouble(request.queryParams("price"))
-					);
-					bookList.add(book);
-
-					response.redirect("/books");
-					response.status(NO_CONTENT);
-					return "";
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException(e);
-				}
-			}
-		});
-
-		get("/books/:id", new Route() {
-			@Override
-			public Object handle(Request request, Response response) {
+		post("/books", (request, response) -> {
 			try {
-				int id = valueOf(request.params(":id"));
-				Optional<Book> book = getBookBy(id);
-				if (!book.isPresent()) {
-					return notFound(response);
-				}
-				ViewModel model = new ViewModel();
-				model.put("book", book.get());
-				model.put("basket_count", basket.size());
+				int nextId = nextBookId();
+				Book book = new Book(
+						nextId,
+						request.queryParams("name"),
+						request.queryParams("description"),
+						request.queryParams("available") != null,
+						parseDouble(request.queryParams("price"))
+				);
+				bookList.add(book);
 
-				return render("bookdetails.jade", model);
+				response.redirect("/books");
+				response.status(NO_CONTENT);
+				return "";
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
+		});
+
+		get("/books/:id", (request, response) -> {
+		try {
+			int id = valueOf(request.params(":id"));
+			Optional<Book> book = getBookBy(id);
+			if (!book.isPresent()) {
+				return notFound(response);
 			}
+			ViewModel model = new ViewModel();
+			model.put("book", book.get());
+			model.put("basket_count", basket.size());
+
+			return render("bookdetails.jade", model);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 		});
 
 		post("/basket", (request, response) -> {
