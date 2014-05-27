@@ -240,6 +240,7 @@ public class BookstoreApp {
 				List<Book> booksBought = new ArrayList<>(basket);
 
 				orders.add(new Order(nextOrderId(), new Date(), paymentDetails, booksBought));
+				basket.clear();
 
 				response.redirect("/orderconfirmation");
 				response.status(NO_CONTENT);
