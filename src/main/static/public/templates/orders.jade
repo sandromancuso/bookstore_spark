@@ -9,4 +9,12 @@ html
             p: strong Order History
 
         div
-            p TO BE IMPLEMENTED!!!!
+            for order in orders
+                p: strong Order - #{order.id} - #{order.date}
+                ul#books
+                    for book in order.booksBought
+                        li
+                            | #{book.id} -
+                            a(href="/books/#{book.id}")=book.name
+                            =' '
+                            | for £ #{book.price}

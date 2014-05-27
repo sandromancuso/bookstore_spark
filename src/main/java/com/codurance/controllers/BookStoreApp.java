@@ -239,7 +239,7 @@ public class BookstoreApp {
 				request.queryMap().toMap().entrySet().stream().forEach(e -> paymentDetails.put(e.getKey(), e.getValue()[0]));
 				List<Book> booksBought = new ArrayList<>(basket);
 
-				orders.add(new Order(paymentDetails, booksBought));
+				orders.add(new Order(nextOrderId(), new Date(), paymentDetails, booksBought));
 
 				response.redirect("/orderconfirmation");
 				response.status(NO_CONTENT);
@@ -261,7 +261,9 @@ public class BookstoreApp {
 
 		get("/orders", (request, response) -> {
 			try {
-				return render("orders.jade");
+				ViewModel model = new ViewModel();
+				model.put("orders", orders);
+				return render("orders.jade", model);
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
@@ -289,6 +291,12 @@ public class BookstoreApp {
 		return lastId.orElse(0) + 1;
 	}
 
+	private static int nextOrderId() {
+		Stream<Integer> olderListDescending = orders.stream().map(Order::getId).sorted(reverseOrder());
+		Optional<Integer> lastId = olderListDescending.findFirst();
+		return lastId.orElse(0) + 1;
+	}
+
 	private static void createBooks() {
 		bookList.add(new Book(nextBookId(), "Book A", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eu.", true, 10));
 		bookList.add(new Book(nextBookId(), "Book B", "Ut sollicitudin mi et felis laoreet tempor. Sed tincidunt, nisl.", true, 20));
@@ -298,12 +306,24 @@ public class BookstoreApp {
 
 	public static class Order {
 
+		private int id;
+		private Date date;
 		private Map<String, String> paymentDetails;
 		private List<Book> booksBought;
 
-		public Order(Map<String, String> paymentDetails, List<Book> booksBought) {
+		public Order(int id, Date date, Map<String, String> paymentDetails, List<Book> booksBought) {
+			this.id = id;
+			this.date = date;
 			this.paymentDetails = paymentDetails;
 			this.booksBought = booksBought;
+		}
+
+		public int getId() {
+			return id;
+		}
+
+		public Date getDate() {
+			return date;
 		}
 
 		public Map<String, String> getPaymentDetails() {
