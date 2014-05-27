@@ -11,7 +11,7 @@ public class JadeRenderer {
 
 	public static String render(String template, ViewModel viewModel) {
 		try {
-			return Jade4J.render(BASE_TEMPLATE_FOLDER.resolve(template).toUri().toURL(), viewModel);
+			return Jade4J.render(BASE_TEMPLATE_FOLDER.resolve(template).toUri().toURL(), viewModel.toMap());
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);

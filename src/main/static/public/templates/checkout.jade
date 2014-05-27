@@ -6,8 +6,8 @@ html
         div
             p: a(href="/") Home
 
-        p: strong Your basket - #{basket_count} item(s)
-
+        div
+            p: strong Checkout
         div
             ul#basket
                 for book in basket
@@ -20,12 +20,5 @@ html
                         form(action="/basket/delete", method="post")
                             input(type="hidden", name="bookId", value="#{book.id}")
                             input(type="submit", value="remove")
-
         div
             p Total: #{total}
-
-        div
-            form(action="/basket/clear", method="post")
-                input(type="submit", value="Clear basket")
-            form
-                input(type="button", value="Proceed to checkout", onclick="parent.location='/checkout'")

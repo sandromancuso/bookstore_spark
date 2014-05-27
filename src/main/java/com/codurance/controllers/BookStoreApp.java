@@ -183,6 +183,18 @@ public class BookStoreApp {
 			}
 		});
 
+		get("/checkout", (request, response) -> {
+			try {
+				ViewModel model = new ViewModel();
+				model.put("basket", basket);
+				model.put("total", basketTotal());
+				return render("checkout.jade", model);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+
 	}
 
 	private static Double basketTotal() {
