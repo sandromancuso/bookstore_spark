@@ -5,6 +5,8 @@ html
     body
         p: span
             a(href="/basket") Basket(#{basket_count})
+            =' | '
+            a(href="/orders") Order History
 
 
         form(name="searchbook", action="/books/search", method="get")

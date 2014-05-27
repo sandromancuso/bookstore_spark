@@ -5,14 +5,14 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.codurance.infrastructure.template.jade.JadeRenderer.render;
 import static java.lang.Double.parseDouble;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableMap;
 import static java.util.Comparator.reverseOrder;
 import static spark.Spark.*;
 
@@ -21,6 +21,7 @@ public class BookStoreApp {
 	public static final int NO_CONTENT = 204;
 	private static List<Book> bookList = new ArrayList<>();
 	private static List<Book> basket = new ArrayList<>();
+	private static List<Order> orders = new ArrayList<>();
 
 	public static void main(String[] args) {
 
@@ -195,6 +196,41 @@ public class BookStoreApp {
 			}
 		});
 
+		post("/payment", (request, response) -> {
+			try {
+				Map<String, String> paymentDetails = new HashMap<>();
+				request.queryMap().toMap().entrySet().stream().forEach(e -> paymentDetails.put(e.getKey(), e.getValue()[0]));
+				List<Book> booksBought = new ArrayList<>(basket);
+
+				orders.add(new Order(paymentDetails, booksBought));
+
+				response.redirect("/orderconfirmation");
+				response.status(NO_CONTENT);
+				return "";
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+
+		get("/orderconfirmation", (request, response) -> {
+			try {
+				return render("orderconfirmation.jade");
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+
+		get("/orders", (request, response) -> {
+			try {
+				return render("orders.jade");
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+
 	}
 
 	private static Double basketTotal() {
@@ -221,6 +257,25 @@ public class BookStoreApp {
 		bookList.add(new Book(nextBookId(), "Book B", "Ut sollicitudin mi et felis laoreet tempor. Sed tincidunt, nisl.", true, 20));
 		bookList.add(new Book(nextBookId(), "Book C", "Vivamus id sem magna. Phasellus non elit vel tortor adipiscing.", true, 30));
 		bookList.add(new Book(nextBookId(), "Book D", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.", true, 40));
+	}
+
+	public static class Order {
+
+		private Map<String, String> paymentDetails;
+		private List<Book> booksBought;
+
+		public Order(Map<String, String> paymentDetails, List<Book> booksBought) {
+			this.paymentDetails = paymentDetails;
+			this.booksBought = booksBought;
+		}
+
+		public Map<String, String> getPaymentDetails() {
+			return unmodifiableMap(paymentDetails);
+		}
+
+		public List<Book> getBooksBought() {
+			return unmodifiableList(booksBought);
+		}
 	}
 
 	public static class Book {
