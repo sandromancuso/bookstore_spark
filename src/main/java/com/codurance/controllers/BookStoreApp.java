@@ -223,7 +223,8 @@ public class BookstoreApp {
 			try {
 				Map<String, String> paymentDetails = new HashMap<>();
 				request.queryMap().toMap().entrySet().stream().forEach(e -> paymentDetails.put(e.getKey(), e.getValue()[0]));
-				List<Book> booksBought = new ArrayList<>(basket);
+				List<Book> booksBought = new ArrayList<>();
+				basket.stream().forEach(book -> booksBought.add(book.clone()));
 
 				orders.add(new Order(nextOrderId(), new Date(), paymentDetails, booksBought));
 				basket.clear();
@@ -374,6 +375,10 @@ public class BookstoreApp {
 
 		public void setPrice(double price) {
 			this.price = price;
+		}
+
+		public Book clone() {
+			return new Book(id, name, description, available, price);
 		}
 
 	}
