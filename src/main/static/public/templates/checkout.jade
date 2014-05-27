@@ -28,27 +28,10 @@ html
                 form(name="payment", action="/payment", method="post")
                     div
                         dt: span Full name
-                        dd: input(type="text", name="full_name", required)
-                        dt: span Address Line 1
-                        dd: input(type="text", name="address_line_1", required)
-                        dt: span Town/City
-                        dd: input(type="text", name="town_city", required)
-                        dt: span Postcode
-                        dd: input(type="text", name="postcode", required)
-                        dt: span Country
-                        dd: input(type="text", name="country", required)
-                        dt: span Card Type
-                        label American Express
-                            input(type="radio", name="card", value="AMEX", required)
-                        label Visa
-                            input(type="radio", name="card", value="VISA", required)
-                        label Mastercard
-                            input(type="radio", name="card", value="Mastercard", required)
-                        dt: span Card Number
-                        dd: input(type="text", name="card_number", required)
-                        dt: span CVC
-                        dd: input(type="text", size="4", name="card_cvc", required)
-                        dt: span Expiration Date (MM/YYYY)
-                        dd: input(type="text", size="7", name="card_expiration_date", required)
+                        dd: input(type="text", name="Name", required)
+                        dt: span Address
+                        dd: input(type="text", name="address", required)
+                        dt: span Card details
+                        dd: input(type="text", name="card_details", required)
                     div
                         input(type="submit", value="Pay now")
