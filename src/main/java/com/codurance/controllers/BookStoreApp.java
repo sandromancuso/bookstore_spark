@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import static com.codurance.infrastructure.template.jade.JadeRenderer.render;
 import static java.lang.Double.parseDouble;
+import static java.lang.Integer.valueOf;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
 import static java.util.Comparator.reverseOrder;
@@ -76,6 +77,42 @@ public class BookstoreApp {
 			}
 		});
 
+		get("/books/edit/:id", (request, response) -> {
+			try {
+				Optional<Book> book = getBookBy(valueOf(request.params(":id")));
+				if (!book.isPresent()) {
+					return notFound(response);
+				}
+				ViewModel model = new ViewModel();
+				model.put("book", book.get());
+
+				return render("editbook.jade", model);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+
+		post("/books/edit", (request, response) -> {
+			try {
+				Optional<Book> book = getBookBy(valueOf(request.queryParams("id")));
+				if (!book.isPresent()) {
+					return notFound(response);
+				}
+			    book.get().setName(request.queryParams("name"));
+				book.get().setDescription(request.queryParams("description"));
+				book.get().setAvailable(request.queryParams("available") != null);
+				book.get().setPrice(parseDouble(request.queryParams("price")));
+
+				response.redirect("/books");
+				response.status(NO_CONTENT);
+				return "";
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+
 		post("/books", new Route() {
 			@Override
 			public Object handle(Request request, Response response) {
@@ -104,7 +141,7 @@ public class BookstoreApp {
 			@Override
 			public Object handle(Request request, Response response) {
 			try {
-				int id = Integer.valueOf(request.params(":id"));
+				int id = valueOf(request.params(":id"));
 				Optional<Book> book = getBookBy(id);
 				if (!book.isPresent()) {
 					return notFound(response);
@@ -123,7 +160,7 @@ public class BookstoreApp {
 
 		post("/basket", (request, response) -> {
 			try {
-				int id = Integer.valueOf(request.queryParams("bookId"));
+				int id = valueOf(request.queryParams("bookId"));
 				Optional<Book> book = getBookBy(id);
 				if (!book.isPresent()) {
 					return notFound(response);
@@ -155,7 +192,7 @@ public class BookstoreApp {
 
 		post("/basket/delete", (request, response) -> {
 			try {
-				int id = Integer.valueOf(request.queryParams("bookId"));
+				int id = valueOf(request.queryParams("bookId"));
 				Optional<Book> book = getBookBy(id);
 				if (!book.isPresent()) {
 					return notFound(response);
@@ -280,11 +317,12 @@ public class BookstoreApp {
 
 	public static class Book {
 
-		private final boolean available;
-		private final String name;
-		private final int id;
-		private final double price;
-		private final String description;
+		private int id;
+
+		private boolean available;
+		private String name;
+		private double price;
+		private String description;
 
 		public Book(int id, String name, String description, boolean available, double price) {
 			this.id = id;
@@ -294,6 +332,7 @@ public class BookstoreApp {
 			this.description = description;
 		}
 
+
 		public int getId() {
 			return this.id;
 		}
@@ -302,16 +341,32 @@ public class BookstoreApp {
 			return this.name;
 		}
 
+		public void setName(String name) {
+			this.name = name;
+		}
+
 		public String getDescription() {
 			return description;
+		}
+
+		public void setDescription(String description) {
+			this.description = description;
 		}
 
 		public boolean isAvailable() {
 			return this.available;
 		}
 
+		public void setAvailable(boolean available) {
+			this.available = available;
+		}
+
 		public double getPrice() {
 			return this.price;
+		}
+
+		public void setPrice(double price) {
+			this.price = price;
 		}
 
 	}

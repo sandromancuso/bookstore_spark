@@ -1,0 +1,26 @@
+!!! 5
+html
+    head
+        title=pageName
+    body
+
+    div
+        p: a(href="/") Home
+
+        p: span Change book details
+
+        form(name="editbook", action="/books/edit", method="post")
+            div
+                dt: span name
+                dd: input(type="text", name="name", value="#{book.name}")
+                dt: span description
+                dd: input(type="text", name="description", value="#{book.description}")
+                dt: span price
+                dd: input(type="text", name="price", value="#{book.price}")
+                dt: span available
+                dd: input(type="checkbox", checked="#{book.available}", name="available")
+                dd: input(type="hidden", name="id", value="#{book.id}")
+            div
+                input(type="submit", value="Change details")
+        div
+            p: a(href="/books") Back to all books
