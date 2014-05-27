@@ -110,6 +110,8 @@ public class BookStoreApp {
 				}
 				ViewModel model = new ViewModel();
 				model.put("book", book.get());
+				model.put("basket_count", basket.size());
+
 				return render("bookdetails.jade", model);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -168,6 +170,19 @@ public class BookStoreApp {
 			}
 		});
 
+		post("/basket/clear", (request, response) -> {
+			try {
+				basket.clear();
+
+				response.redirect("/basket");
+				response.status(NO_CONTENT);
+				return "";
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		});
+
 	}
 
 	private static Double basketTotal() {
@@ -191,8 +206,9 @@ public class BookStoreApp {
 
 	private static void createBooks() {
 		bookList.add(new Book(nextBookId(), "Book A", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eu.", true, 10));
-		bookList.add(new Book(nextBookId(), "Book B", "Ut sollicitudin mi et felis laoreet tempor. Sed tincidunt, nisl.", false, 20));
+		bookList.add(new Book(nextBookId(), "Book B", "Ut sollicitudin mi et felis laoreet tempor. Sed tincidunt, nisl.", true, 20));
 		bookList.add(new Book(nextBookId(), "Book C", "Vivamus id sem magna. Phasellus non elit vel tortor adipiscing.", true, 30));
+		bookList.add(new Book(nextBookId(), "Book D", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.", true, 40));
 	}
 
 	public static class Book {

@@ -6,7 +6,7 @@ html
         div
             p: a(href="/") Home
 
-        p: strong Your basket #{basket_count}
+        p: strong Your basket - #{basket_count} item(s)
 
         div
             ul#basket
@@ -23,3 +23,7 @@ html
 
         div
             p Total: #{total}
+
+        div
+            form(action="/basket/clear", method="post")
+                input(type="submit", value="Clear basket")

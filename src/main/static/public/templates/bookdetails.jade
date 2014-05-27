@@ -4,7 +4,10 @@ html
         title=pageName
     body
         div
-            span: a(href="/") Home
+            span
+                a(href="/") Home
+                =' | '
+                a(href="/basket") basket(#{basket_count})
 
         dl
             dt Id:

@@ -3,9 +3,8 @@ html
     head
         title=pageName
     body
-        p: span Your
-            =' '
-            a(href="/basket") basket(#{basket_count})
+        p: span
+            a(href="/basket") Basket(#{basket_count})
 
 
         form(name="searchbook", action="/books/search", method="get")
