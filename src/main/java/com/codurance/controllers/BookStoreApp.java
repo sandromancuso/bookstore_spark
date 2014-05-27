@@ -16,7 +16,7 @@ import static java.util.Collections.unmodifiableMap;
 import static java.util.Comparator.reverseOrder;
 import static spark.Spark.*;
 
-public class BookStoreApp {
+public class BookstoreApp {
 
 	public static final int NO_CONTENT = 204;
 	private static List<Book> bookList = new ArrayList<>();
