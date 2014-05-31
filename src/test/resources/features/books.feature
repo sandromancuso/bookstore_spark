@@ -1,6 +1,6 @@
 Feature: Display books
 
-    Scenario: List all books
+    Scenario: Book details
         Given there are some books available
-	    When I go to the books page
-	    Then I should see all the books
+	    When I click on a book title
+	    Then I should see the book details

@@ -19,7 +19,7 @@ html
         ul#books
             for book in books
                 if book.available
-                    li
+                    li(class="bookline")
                         | #{book.id} -
                         a(href="/books/#{book.id}")=book.name
                         =' '
