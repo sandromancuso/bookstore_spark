@@ -1,7 +1,9 @@
 package com.codurance.controllers;
 
+import com.codurance.infrastructure.repositories.InMemoryLibrary;
 import com.codurance.infrastructure.template.jade.ViewModel;
 import com.codurance.model.book.Book;
+import com.codurance.model.book.Library;
 import spark.Response;
 
 import java.util.*;
@@ -19,7 +21,8 @@ import static spark.Spark.*;
 public class BookstoreApp {
 
 	public static final int NO_CONTENT = 204;
-	private static List<Book> bookList = new ArrayList<>();
+//	private static List<Book> bookList = new ArrayList<>();
+	private static Library library = new InMemoryLibrary();
 	private static List<Book> basket = new ArrayList<>();
 	private static List<Order> orders = new ArrayList<>();
 
@@ -38,7 +41,7 @@ public class BookstoreApp {
 		get("/books", (request, response) -> {
 			ViewModel viewModel = new ViewModel();
 			viewModel.put("pageName", "Books");
-			viewModel.put("books", bookList);
+			viewModel.put("books", library.allBooks());
 			viewModel.put("basket_count", basket.size());
 
 			return render("index.jade", viewModel);
@@ -47,7 +50,7 @@ public class BookstoreApp {
 		get("/books/search", (request, response) -> {
 			try {
 				String criteria = request.queryParams("criteria");
-				List<Book> filteredBooks = bookList.stream().filter(book -> book.getName().contains(criteria)).collect(Collectors.toList());
+				List<Book> filteredBooks = library.booksWhichNameContains(criteria);
 
 				ViewModel viewModel = new ViewModel();
 				viewModel.put("pageName", "Books");
@@ -108,7 +111,7 @@ public class BookstoreApp {
 
 		post("/books", (request, response) -> {
 			try {
-				int nextId = nextBookId();
+				int nextId = library.nextBookId();
 				Book book = new Book(
 						nextId,
 						request.queryParams("name"),
@@ -116,7 +119,7 @@ public class BookstoreApp {
 						request.queryParams("available") != null,
 						parseDouble(request.queryParams("price"))
 				);
-				bookList.add(book);
+				library.add(book);
 
 				response.redirect("/books");
 				response.status(NO_CONTENT);
@@ -266,18 +269,12 @@ public class BookstoreApp {
 	}
 
 	private static Optional<Book> getBookBy(int id) {
-		return bookList.stream().collect(Collectors.groupingBy(Book::getId)).get(id).stream().findAny();
+		return library.bookById(id);
 	}
 
 	private static String notFound(Response response) {
 		response.status(404);
 		return "Not Found";
-	}
-
-	private static int nextBookId() {
-		Stream<Integer> bookListDescending = bookList.stream().map(Book::getId).sorted(reverseOrder());
-		Optional<Integer> lastId = bookListDescending.findFirst();
-		return lastId.orElse(0) + 1;
 	}
 
 	private static int nextOrderId() {
@@ -287,10 +284,10 @@ public class BookstoreApp {
 	}
 
 	private static void createBooks() {
-		bookList.add(new Book(nextBookId(), "Book A", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eu.", true, 10));
-		bookList.add(new Book(nextBookId(), "Book B", "Ut sollicitudin mi et felis laoreet tempor. Sed tincidunt, nisl.", true, 20));
-		bookList.add(new Book(nextBookId(), "Book C", "Vivamus id sem magna. Phasellus non elit vel tortor adipiscing.", true, 30));
-		bookList.add(new Book(nextBookId(), "Book D", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.", true, 40));
+		library.add(new Book(library.nextBookId(), "Book A", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eu.", true, 10));
+		library.add(new Book(library.nextBookId(), "Book B", "Ut sollicitudin mi et felis laoreet tempor. Sed tincidunt, nisl.", true, 20));
+		library.add(new Book(library.nextBookId(), "Book C", "Vivamus id sem magna. Phasellus non elit vel tortor adipiscing.", true, 30));
+		library.add(new Book(library.nextBookId(), "Book D", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.", true, 40));
 	}
 
 	public static class Order {
