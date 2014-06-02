@@ -12,7 +12,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
@@ -56,6 +55,10 @@ public class BookstoreTestDSL {
 		return ExpectedConditions.elementToBeClickable(By.linkText(text));
 	}
 
+	public static void waitUntilPageTitleIs(String title) {
+		(new WebDriverWait(driver, 5)).until(ExpectedConditions.titleIs(title));
+	}
+
 	public static void searchBookWithTitle(String title) {
 		WebElement searchBox = elementById("book_criteria");
 		searchBox.sendKeys(title);
@@ -72,6 +75,14 @@ public class BookstoreTestDSL {
 
 	public static void clearBasket() {
 		click("clear_basket");
+	}
+
+	public static void proceedToCheckout() {
+		click("checkout");
+	}
+
+	public static void submitPayment() {
+		click("pay_now");
 	}
 
 	public static void assertLinkWithTextExists(String text) {
@@ -123,7 +134,7 @@ public class BookstoreTestDSL {
 		}
 
 		public void with(String text) {
-			driver.findElement(By.id(inputId)).sendKeys(text);
+			elementById(inputId).sendKeys(text);
 		}
 	}
 

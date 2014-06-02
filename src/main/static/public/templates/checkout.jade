@@ -1,7 +1,7 @@
 !!! 5
 html
     head
-        title=pageName
+        title Checkout
     body
         div
             p: a(href="/") Home
@@ -28,10 +28,10 @@ html
                 form(name="payment", action="/payment", method="post")
                     div
                         dt: span Full name
-                        dd: input(type="text", name="Name", required)
+                        dd: input(id="user_name", type="text", name="Name", required)
                         dt: span Address
-                        dd: input(type="text", name="address", required)
+                        dd: input(id="address", type="text", name="address", required)
                         dt: span Card details
-                        dd: input(type="text", name="card_details", required)
+                        dd: input(id="card_details", type="text", name="card_details", required)
                     div
-                        input(type="submit", value="Pay now")
+                        input(id="pay_now", type="submit", value="Pay now")

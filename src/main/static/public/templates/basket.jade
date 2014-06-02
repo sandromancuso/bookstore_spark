@@ -1,7 +1,7 @@
 !!! 5
 html
     head
-        title=pageName
+        title Basket
     body
         div
             p: a(href="/") Home
@@ -27,5 +27,5 @@ html
         div
             form(action="/basket/clear", method="post")
                 input(id="clear_basket", type="submit", value="Clear basket")
-            form
-                input(type="button", value="Proceed to checkout", onclick="parent.location='/checkout'")
+            form(action="/checkout", method="get")
+                input(id="checkout", type="submit", value="Proceed to checkout")
