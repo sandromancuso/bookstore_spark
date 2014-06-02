@@ -22,10 +22,10 @@ html
                             input(type="submit", value="remove")
 
         div
-            p Total: #{total}
+            p: span(id="total") Total: #{total}
 
         div
             form(action="/basket/clear", method="post")
-                input(type="submit", value="Clear basket")
+                input(id="clear_basket", type="submit", value="Clear basket")
             form
                 input(type="button", value="Proceed to checkout", onclick="parent.location='/checkout'")

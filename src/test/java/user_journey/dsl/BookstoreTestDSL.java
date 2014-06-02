@@ -62,6 +62,18 @@ public class BookstoreTestDSL {
 		click("search_submit");
 	}
 
+	public static void addBookToBasket(String bookId) {
+		elementById("submit_to_basket_" + bookId).click();
+	}
+
+	public static void assertBasketTotalIs(String total) {
+		assertThat(elementById("total").getText(), is(total));
+	}
+
+	public static void clearBasket() {
+		click("clear_basket");
+	}
+
 	public static void assertLinkWithTextExists(String text) {
 		assertThat(driver.findElement(By.linkText(text)), is(notNullValue()));
 	}

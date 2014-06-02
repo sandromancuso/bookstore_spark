@@ -28,7 +28,7 @@ html
                         div
                             form(action="/basket", method="post")
                                 input(type="hidden", name="bookId", value="#{book.id}")
-                                input(type="submit", value="add to basket")
+                                input(id="submit_to_basket_#{book.id}", type="submit", value="add to basket")
 
         p
             a(href="/books/add") Add book to library
