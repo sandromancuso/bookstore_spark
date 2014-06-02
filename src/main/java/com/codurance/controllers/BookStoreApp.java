@@ -7,7 +7,6 @@ import com.codurance.model.book.Library;
 import spark.Response;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.codurance.infrastructure.template.jade.JadeRenderer.render;
@@ -21,7 +20,6 @@ import static spark.Spark.*;
 public class BookstoreApp {
 
 	public static final int NO_CONTENT = 204;
-//	private static List<Book> bookList = new ArrayList<>();
 	private static Library library = new InMemoryLibrary();
 	private static List<Book> basket = new ArrayList<>();
 	private static List<Order> orders = new ArrayList<>();

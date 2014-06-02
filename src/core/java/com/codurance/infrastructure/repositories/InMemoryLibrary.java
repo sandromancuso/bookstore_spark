@@ -4,10 +4,11 @@ import com.codurance.model.book.Book;
 import com.codurance.model.book.Library;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
 
 public class InMemoryLibrary implements Library {
 
@@ -30,13 +31,13 @@ public class InMemoryLibrary implements Library {
 
 	@Override
 	public List<Book> allBooks() {
-		return Collections.unmodifiableList(books);
+		return unmodifiableList(books);
 	}
 
 	@Override
 	public List<Book> booksWhichNameContains(String text) {
 		return books.stream()
 					.filter(book -> book.getName().toUpperCase().contains(text.toUpperCase()))
-					.collect(Collectors.toList());
+					.collect(toList());
 	}
 }
