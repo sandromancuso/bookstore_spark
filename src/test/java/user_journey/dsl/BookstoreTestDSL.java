@@ -1,6 +1,7 @@
 package user_journey.dsl;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -10,9 +11,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public class BookstoreTestDSL {
 
@@ -33,19 +37,42 @@ public class BookstoreTestDSL {
 	}
 
 	public static void check(String checkboxId) {
-		click(checkboxId);
+		if (isUnchecked(checkboxId)) click(checkboxId);
+	}
+
+	public static boolean isUnchecked(String checkboxId) {
+		return !elementById(checkboxId).isSelected();
 	}
 
 	public static void click(String elementId) {
-		driver.findElement(By.id(elementId)).click();
+		elementById(elementId).click();
 	}
 
-	public static void waitUnitl(ExpectedCondition<WebElement> expectedCondition) {
-		(new WebDriverWait(driver, 3)).until(expectedCondition);
+	public static void waitUntil(ExpectedCondition<WebElement> expectedCondition) {
+		(new WebDriverWait(driver, 5)).until(expectedCondition);
 	}
 
 	public static ExpectedCondition<WebElement> linkWithTextExists(String text) {
 		return ExpectedConditions.elementToBeClickable(By.linkText(text));
+	}
+
+	public static void searchBookWithTitle(String title) {
+		WebElement searchBox = elementById("book_criteria");
+		searchBox.sendKeys(title);
+		click("search_submit");
+	}
+
+	public static void assertLinkWithTextExists(String text) {
+		assertThat(driver.findElement(By.linkText(text)), is(notNullValue()));
+	}
+
+	public static void assertLinkWithTextDoesNotExist(String text) {
+		try {
+			driver.findElement(By.linkText(text));
+		    fail("Link with text [" + text + "] was found.");
+		} catch (NoSuchElementException e) {
+			// Expected exception to be thrown.
+		}
 	}
 
 	public static void assertBookDetailsAreNotEmpty() {
@@ -58,6 +85,10 @@ public class BookstoreTestDSL {
 	public static void clickOnFirstBook() {
 		List<WebElement> bookLinks = elementsByCSS(".bookline a");
 		bookLinks.get(0).click();
+	}
+
+	public static WebElement elementById(String id) {
+		return driver.findElement(By.id(id));
 	}
 
 	public static List<WebElement> elementsByCSS(String css) {

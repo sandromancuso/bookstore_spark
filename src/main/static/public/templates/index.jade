@@ -11,8 +11,8 @@ html
 
         form(name="searchbook", action="/books/search", method="get")
             span Search
-            input(type="text", name="criteria", value=criteria)
-            input(type="submit", value="Search")
+            input(type="text", id="book_criteria", name="criteria", value=criteria)
+            input(type="submit", id="search_submit", value="Search")
         p
             a(href="/books") All books
 

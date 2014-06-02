@@ -19,12 +19,12 @@ public class AddBookToLibrarySpec {
 
 	@When("^the book is added$")
 	public void the_book_is_added() throws Throwable {
-		click("submit");
+		click("submit_newbook");
 	}
 
 	@Then("^the book should be displayed in the library$")
 	public void the_book_should_be_displayed_in_the_library() throws Throwable {
-		waitUnitl(linkWithTextExists("New book"));
+		waitUntil(linkWithTextExists("New book"));
 		assertPageTitleIs("Books");
 	}
 
