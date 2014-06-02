@@ -37,7 +37,7 @@ public class InMemoryLibraryShould {
 	return_an_empty_list_when_no_books_match_specified_name() {
 		library.add(BOOK_A);
 
-		List<Book> result = library.findBookNamed("NON_EXISTENT_TITLE");
+		List<Book> result = library.booksWhichNameContains("NON_EXISTENT_TITLE");
 
 	    assertThat(result.isEmpty(), is(true));
 	}
@@ -48,11 +48,11 @@ public class InMemoryLibraryShould {
 		library.add(BOOK_BLAH);
 		library.add(BOOK_B);
 
-		List<Book> results = library.findBookNamed("ook");
+		List<Book> result = library.booksWhichNameContains("ook");
 
-	    assertThat(results.size(), is(2));
-	    assertThat(results.contains(BOOK_A), is(true));
-	    assertThat(results.contains(BOOK_B), is(true));
+	    assertThat(result.size(), is(2));
+	    assertThat(result.contains(BOOK_A), is(true));
+	    assertThat(result.contains(BOOK_B), is(true));
 	}
 
 

@@ -8,5 +8,5 @@ public interface Library {
 
 	List<Book> allBooks();
 
-	List<Book> findBookNamed(String title);
+	List<Book> booksWhichNameContains(String title);
 }

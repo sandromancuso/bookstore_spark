@@ -23,9 +23,9 @@ public class InMemoryLibrary implements Library {
 	}
 
 	@Override
-	public List<Book> findBookNamed(String title) {
+	public List<Book> booksWhichNameContains(String text) {
 		return books.stream()
-					.filter(book -> book.getName().toUpperCase().contains(title.toUpperCase()))
+					.filter(book -> book.getName().toUpperCase().contains(text.toUpperCase()))
 					.collect(Collectors.toList());
 	}
 
