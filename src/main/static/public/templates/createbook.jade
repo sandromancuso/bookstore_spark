@@ -11,15 +11,15 @@ html
         form(name="addbook", action="/books", method="post")
             div
                 dt: span name
-                dd: input(type="text", name="name")
+                dd: input(id="book_name", type="text", name="name")
                 dt: span description
-                dd: input(type="text", name="description")
+                dd: input(id="book_description", type="text", name="description")
                 dt: span price
-                dd: input(type="text", name="price")
+                dd: input(id="book_price", type="text", name="price")
                 dt: span available
-                dd: input(type="checkbox", checked, name="available")
+                dd: input(id="book_availability", type="checkbox", checked, name="available")
             div
-                input(type="submit", value="Add book")
+                input(id="submit", type="submit", value="Add book")
 
         div
             p: a(href="/books") Back to all books
