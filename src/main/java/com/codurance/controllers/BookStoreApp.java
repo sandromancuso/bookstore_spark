@@ -4,6 +4,7 @@ import com.codurance.infrastructure.repositories.InMemoryLibrary;
 import com.codurance.infrastructure.template.jade.ViewModel;
 import com.codurance.model.book.Book;
 import com.codurance.model.book.Library;
+import com.codurance.model.order.Order;
 import spark.Response;
 
 import java.util.*;
@@ -12,8 +13,6 @@ import java.util.stream.Stream;
 import static com.codurance.infrastructure.template.jade.JadeRenderer.render;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.valueOf;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableMap;
 import static java.util.Comparator.reverseOrder;
 import static spark.Spark.*;
 
@@ -286,37 +285,6 @@ public class BookstoreApp {
 		library.add(new Book(library.nextBookId(), "Book B", "Ut sollicitudin mi et felis laoreet tempor. Sed tincidunt, nisl.", true, 20));
 		library.add(new Book(library.nextBookId(), "Book C", "Vivamus id sem magna. Phasellus non elit vel tortor adipiscing.", true, 30));
 		library.add(new Book(library.nextBookId(), "Book D", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.", true, 40));
-	}
-
-	public static class Order {
-
-		private int id;
-		private Date date;
-		private Map<String, String> paymentDetails;
-		private List<Book> booksBought;
-
-		public Order(int id, Date date, Map<String, String> paymentDetails, List<Book> booksBought) {
-			this.id = id;
-			this.date = date;
-			this.paymentDetails = paymentDetails;
-			this.booksBought = booksBought;
-		}
-
-		public int getId() {
-			return id;
-		}
-
-		public Date getDate() {
-			return date;
-		}
-
-		public Map<String, String> getPaymentDetails() {
-			return unmodifiableMap(paymentDetails);
-		}
-
-		public List<Book> getBooksBought() {
-			return unmodifiableList(booksBought);
-		}
 	}
 
 }
