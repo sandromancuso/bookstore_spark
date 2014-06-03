@@ -4,7 +4,6 @@ import com.codurance.infrastructure.repositories.InMemoryLibrary;
 import com.codurance.model.book.Book;
 import org.junit.Before;
 import org.junit.Test;
-import org.omg.PortableInterceptor.NON_EXISTENT;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +54,7 @@ public class InMemoryLibraryShould {
 
 	@Test public void
 	return_1_as_next_book_id_when_there_are_no_books() {
-	    assertThat(library.nextBookId(), is(1));
+	    assertThat(library.nextId(), is(1));
 	}
 
 	@Test public void
@@ -63,7 +62,7 @@ public class InMemoryLibraryShould {
 		library.add(BOOK_A);
 		library.add(BOOK_B);
 
-	    assertThat(library.nextBookId(), is(3));
+	    assertThat(library.nextId(), is(3));
 	}
 
 	@Test public void

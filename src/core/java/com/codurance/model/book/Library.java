@@ -9,7 +9,7 @@ public interface Library {
 
 	Optional<Book> bookById(Integer id);
 
-	int nextBookId();
+	int nextId();
 
 	List<Book> allBooks();
 

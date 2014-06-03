@@ -25,7 +25,7 @@ public class InMemoryLibrary implements Library {
 	}
 
 	@Override
-	public int nextBookId() {
+	public int nextId() {
 		return books.stream().mapToInt(b -> b.getId()).max().orElse(0) + 1;
 	}
 

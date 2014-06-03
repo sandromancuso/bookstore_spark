@@ -108,7 +108,7 @@ public class BookstoreApp {
 
 		post("/books", (request, response) -> {
 			try {
-				int nextId = library.nextBookId();
+				int nextId = library.nextId();
 				Book book = new Book(
 						nextId,
 						request.queryParams("name"),
@@ -281,10 +281,10 @@ public class BookstoreApp {
 	}
 
 	private static void createBooks() {
-		library.add(new Book(library.nextBookId(), "Book A", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eu.", true, 10));
-		library.add(new Book(library.nextBookId(), "Book B", "Ut sollicitudin mi et felis laoreet tempor. Sed tincidunt, nisl.", true, 20));
-		library.add(new Book(library.nextBookId(), "Book C", "Vivamus id sem magna. Phasellus non elit vel tortor adipiscing.", true, 30));
-		library.add(new Book(library.nextBookId(), "Book D", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.", true, 40));
+		library.add(new Book(library.nextId(), "Book A", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eu.", true, 10));
+		library.add(new Book(library.nextId(), "Book B", "Ut sollicitudin mi et felis laoreet tempor. Sed tincidunt, nisl.", true, 20));
+		library.add(new Book(library.nextId(), "Book C", "Vivamus id sem magna. Phasellus non elit vel tortor adipiscing.", true, 30));
+		library.add(new Book(library.nextId(), "Book D", "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.", true, 40));
 	}
 
 }
