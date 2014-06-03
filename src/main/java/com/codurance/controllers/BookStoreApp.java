@@ -1,19 +1,19 @@
 package com.codurance.controllers;
 
 import com.codurance.infrastructure.repositories.InMemoryLibrary;
+import com.codurance.infrastructure.repositories.InMemoryOrders;
 import com.codurance.infrastructure.template.jade.ViewModel;
 import com.codurance.model.book.Book;
 import com.codurance.model.book.Library;
 import com.codurance.model.order.Order;
+import com.codurance.model.order.Orders;
 import spark.Response;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import static com.codurance.infrastructure.template.jade.JadeRenderer.render;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.valueOf;
-import static java.util.Comparator.reverseOrder;
 import static spark.Spark.*;
 
 public class BookstoreApp {
@@ -21,7 +21,7 @@ public class BookstoreApp {
 	public static final int NO_CONTENT = 204;
 	private static Library library = new InMemoryLibrary();
 	private static List<Book> basket = new ArrayList<>();
-	private static List<Order> orders = new ArrayList<>();
+	private static Orders orders = new InMemoryOrders();
 
 	public static void main(String[] args) {
 
@@ -227,7 +227,7 @@ public class BookstoreApp {
 				List<Book> booksBought = new ArrayList<>();
 				basket.stream().forEach(book -> booksBought.add(book.clone()));
 
-				orders.add(new Order(nextOrderId(), new Date(), paymentDetails, booksBought));
+				orders.add(new Order(orders.nextId(), new Date(), paymentDetails, booksBought));
 				basket.clear();
 
 				response.redirect("/orderconfirmation");
@@ -251,7 +251,7 @@ public class BookstoreApp {
 		get("/orders", (request, response) -> {
 			try {
 				ViewModel model = new ViewModel();
-				model.put("orders", orders);
+				model.put("orders", orders.all());
 				return render("orders.jade", model);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -272,12 +272,6 @@ public class BookstoreApp {
 	private static String notFound(Response response) {
 		response.status(404);
 		return "Not Found";
-	}
-
-	private static int nextOrderId() {
-		Stream<Integer> olderListDescending = orders.stream().map(Order::getId).sorted(reverseOrder());
-		Optional<Integer> lastId = olderListDescending.findFirst();
-		return lastId.orElse(0) + 1;
 	}
 
 	private static void createBooks() {
